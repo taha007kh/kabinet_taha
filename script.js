@@ -1,78 +1,103 @@
-/* =========================
+/* =====================================================
    HEADER SCROLL
-========================= */
+===================================================== */
 
 const header = document.getElementById("header");
 
-window.addEventListener("scroll", () => {
+window.addEventListener("scroll", function () {
 
-    if (window.scrollY > 50) {
+    if (window.scrollY > 40) {
+
         header.classList.add("scrolled");
+
     } else {
+
         header.classList.remove("scrolled");
+
     }
 
 });
 
 
-/* =========================
+
+/* =====================================================
    MOBILE MENU
-========================= */
+===================================================== */
 
-const menuBtn = document.getElementById("menuBtn");
-const mobileMenu = document.getElementById("mobileMenu");
+const menuButton =
+    document.getElementById("menuButton");
 
-menuBtn.addEventListener("click", () => {
+const mobileMenu =
+    document.getElementById("mobileMenu");
+
+
+menuButton.addEventListener("click", function () {
 
     mobileMenu.classList.toggle("active");
 
 });
 
 
-const mobileLinks = document.querySelectorAll(".mobile-menu a");
+document
+    .querySelectorAll(".mobile-menu a")
+    .forEach(function (link) {
 
-mobileLinks.forEach(link => {
+        link.addEventListener("click", function () {
 
-    link.addEventListener("click", () => {
+            mobileMenu.classList.remove("active");
 
-        mobileMenu.classList.remove("active");
+        });
 
     });
 
-});
 
 
-/* =========================
+/* =====================================================
    PROJECT FILTER
-========================= */
+===================================================== */
 
-const filters = document.querySelectorAll(".filter");
-const projects = document.querySelectorAll(".project-card");
+const filterButtons =
+    document.querySelectorAll(".filter");
 
-filters.forEach(filter => {
+const projectCards =
+    document.querySelectorAll(".project-card");
 
-    filter.addEventListener("click", () => {
 
-        filters.forEach(item => {
+filterButtons.forEach(function (button) {
+
+    button.addEventListener("click", function () {
+
+
+        filterButtons.forEach(function (item) {
+
             item.classList.remove("active");
+
         });
 
-        filter.classList.add("active");
 
-        const category = filter.dataset.filter;
+        button.classList.add("active");
 
-        projects.forEach(project => {
+
+        const filter =
+            button.getAttribute("data-filter");
+
+
+        projectCards.forEach(function (card) {
+
+            const category =
+                card.getAttribute("data-category");
+
 
             if (
-                category === "all" ||
-                project.dataset.category === category
+                filter === "all" ||
+                filter === category
             ) {
 
-                project.style.display = "block";
+                card.style.display = "";
 
             } else {
 
-                project.style.display = "none";
+                card.style.display = "none";
 
             }
 
@@ -83,66 +108,116 @@ filters.forEach(filter => {
 });
 
 
-/* =========================
+
+/* =====================================================
    LIGHTBOX
-========================= */
+===================================================== */
 
-const lightbox = document.getElementById("lightbox");
-const lightboxImage = document.getElementById("lightboxImage");
-const lightboxClose = document.getElementById("lightboxClose");
+const lightbox =
+    document.getElementById("lightbox");
 
-const projectImages = document.querySelectorAll(".project-image img");
+const lightboxImage =
+    document.getElementById("lightboxImage");
 
-projectImages.forEach(image => {
+const lightboxClose =
+    document.getElementById("lightboxClose");
 
-    image.addEventListener("click", () => {
 
-        lightboxImage.src = image.src;
+document
+    .querySelectorAll(".project-image img")
+    .forEach(function (image) {
 
-        lightbox.classList.add("active");
+        image.addEventListener("click", function () {
 
-        document.body.style.overflow = "hidden";
+            lightboxImage.src = image.src;
+
+            lightbox.classList.add("active");
+
+            document.body.style.overflow =
+                "hidden";
+
+        });
 
     });
-
-});
 
 
 function closeLightbox() {
 
     lightbox.classList.remove("active");
 
+    lightboxImage.src = "";
+
     document.body.style.overflow = "";
 
 }
 
 
-lightboxClose.addEventListener("click", closeLightbox);
+lightboxClose.addEventListener(
+    "click",
+    closeLightbox
+);
 
 
-lightbox.addEventListener("click", (event) => {
+lightbox.addEventListener(
+    "click",
+    function (event) {
 
-    if (event.target === lightbox) {
+        if (event.target === lightbox) {
 
-        closeLightbox();
+            closeLightbox();
 
-    }
-
-});
-
-
-/* =========================
-   ESC KEY
-========================= */
-
-document.addEventListener("keydown", (event) => {
-
-    if (event.key === "Escape") {
-
-        closeLightbox();
-
-        mobileMenu.classList.remove("active");
+        }
 
     }
+);
 
-});
+
+
+/* =====================================================
+   ESCAPE KEY
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (event.key === "Escape") {
+
+            closeLightbox();
+
+            mobileMenu.classList.remove("active");
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   IMAGE ERROR HANDLER
+   اگر اسم یک عکس اشتباه باشد،
+   کارت سایت نمی‌ترکد.
+===================================================== */
+
+document
+    .querySelectorAll("img")
+    .forEach(function (image) {
+
+        image.addEventListener(
+            "error",
+            function () {
+
+                if (
+                    image.closest(".project-image")
+                ) {
+
+                    image.closest(".project-image")
+                        .classList.add("image-error");
+
+                }
+
+            }
+        );
+
+    });
